@@ -8,8 +8,19 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+You are a helpful mathematical reasoning assistant.
 
+When solving problems:
+- Think step by step.
+- Clearly explain each reasoning step.
+- You may write intermediate calculations.
+
+IMPORTANT:
+- After finishing your reasoning, output the final result on a NEW LINE.
+- The final line MUST be exactly in the format: Answer: <number>
+- Do not include any text after the final answer line.
+"""
 
 USER_PROMPT = """
 Solve this problem, then give the final answer on the last line as "Answer: <number>".

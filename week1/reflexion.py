@@ -15,8 +15,23 @@ Keep the implementation minimal.
 """
 
 # TODO: Fill this in!
-YOUR_REFLEXION_PROMPT = ""
+YOUR_REFLEXION_PROMPT = """
+You are a coding assistant fixing a previously generated function.
 
+You are given:
+- The previous implementation of is_valid_password
+- A list of test failures explaining what went wrong
+
+Your task:
+- Carefully analyze the failures
+- Correct the function so that it satisfies ALL password requirements
+- Keep the implementation minimal and correct
+
+IMPORTANT:
+- Output ONLY a single fenced Python code block
+- The code MUST define is_valid_password(password: str) -> bool
+- Do NOT include explanations or comments
+"""
 
 # Ground-truth test suite used to evaluate generated code
 SPECIALS = set("!@#$%^&*()-_")
@@ -92,12 +107,14 @@ def generate_initial_function(system_prompt: str) -> str:
 
 
 def your_build_reflexion_context(prev_code: str, failures: List[str]) -> str:
-    """TODO: Build the user message for the reflexion step using prev_code and failures.
-
-    Return a string that will be sent as the user content alongside the reflexion system prompt.
-    """
-    return ""
-
+    failure_text = "\n".join(failures)
+    return (
+        "Previous implementation:\n"
+        f"```python\n{prev_code}\n```\n\n"
+        "The following test failures occurred:\n"
+        f"{failure_text}\n\n"
+        "Please provide a corrected implementation."
+    )
 
 def apply_reflexion(
     reflexion_prompt: str,

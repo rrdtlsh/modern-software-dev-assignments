@@ -37,8 +37,17 @@ QUESTION = (
 
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+You are a careful coding assistant.
 
+Rules:
+- Use ONLY the information provided in the Context.
+- Do NOT assume endpoints, headers, or URLs that are not explicitly documented.
+- If information is missing, make the best possible implementation strictly from the Context.
+- Follow the Task and Requirements exactly.
+- Output ONLY a single Python code block.
+- Do not add explanations or extra text outside the code block.
+"""
 
 # For this simple example
 # For this coding task, validate by required snippets rather than exact string
@@ -56,7 +65,7 @@ def YOUR_CONTEXT_PROVIDER(corpus: List[str]) -> List[str]:
 
     For example, return [] to simulate missing context, or [corpus[0]] to include the API docs.
     """
-    return []
+    return corpus
 
 
 def make_user_prompt(question: str, context_docs: List[str]) -> str:

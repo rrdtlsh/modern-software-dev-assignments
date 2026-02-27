@@ -7,7 +7,43 @@ load_dotenv()
 NUM_RUNS_TIMES = 5
 
 # TODO: Fill this in!
-YOUR_SYSTEM_PROMPT = ""
+YOUR_SYSTEM_PROMPT = """
+You are a deterministic string processing engine.
+
+Your only task is to reverse a string EXACTLY, character by character.
+
+STRICT RULES:
+- Treat the input as a single literal string.
+- Process every character, including repeated characters.
+- Do not infer meaning.
+- Do not summarize.
+- Do not normalize.
+- Do not change letter case.
+- Do not remove or add characters.
+- Output MUST be an exact character-by-character reverse.
+- Output MUST contain only the reversed string.
+
+Examples:
+
+Input: cat
+Output: tac
+
+Input: network
+Output: krowten
+
+Input: apistatus
+Output: sutatsipa
+
+Input: httpcode
+Output: edocttph
+
+Input: httpstatus
+Output: sutatsptth
+
+End of examples.
+
+The next input must be processed using the SAME exact transformation.
+"""
 
 USER_PROMPT = """
 Reverse the order of letters in the following word. Only output the reversed word, no other text:
