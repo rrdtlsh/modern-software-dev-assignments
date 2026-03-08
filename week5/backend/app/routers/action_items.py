@@ -1,17 +1,25 @@
-from fastapi import APIRouter, Depends, HTTPException
+from typing import Optional
+
+from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_db
 from ..models import ActionItem
-from ..schemas import ActionItemCreate, ActionItemRead
+from ..schemas import ActionItemCreate, ActionItemRead, BulkCompleteRequest
 
 router = APIRouter(prefix="/action-items", tags=["action_items"])
 
 
 @router.get("/", response_model=list[ActionItemRead])
-def list_items(db: Session = Depends(get_db)) -> list[ActionItemRead]:
-    rows = db.execute(select(ActionItem)).scalars().all()
+def list_items(
+    completed: Optional[bool] = Query(None),
+    db: Session = Depends(get_db),
+) -> list[ActionItemRead]:
+    stmt = select(ActionItem)
+    if completed is not None:
+        stmt = stmt.where(ActionItem.completed == completed)
+    rows = db.execute(stmt).scalars().all()
     return [ActionItemRead.model_validate(row) for row in rows]
 
 
@@ -22,6 +30,27 @@ def create_item(payload: ActionItemCreate, db: Session = Depends(get_db)) -> Act
     db.flush()
     db.refresh(item)
     return ActionItemRead.model_validate(item)
+
+
+@router.post("/bulk-complete", response_model=list[ActionItemRead])
+def bulk_complete(
+    payload: BulkCompleteRequest, db: Session = Depends(get_db)
+) -> list[ActionItemRead]:
+    items = db.execute(select(ActionItem).where(ActionItem.id.in_(payload.ids))).scalars().all()
+    if len(items) != len(payload.ids):
+        found = {item.id for item in items}
+        missing = [i for i in payload.ids if i not in found]
+        raise HTTPException(
+            status_code=404,
+            detail=f"Action items not found: {missing}",
+        )
+    for item in items:
+        item.completed = True
+        db.add(item)
+    db.flush()
+    for item in items:
+        db.refresh(item)
+    return [ActionItemRead.model_validate(item) for item in items]
 
 
 @router.put("/{item_id}/complete", response_model=ActionItemRead)
