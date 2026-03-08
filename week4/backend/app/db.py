@@ -16,6 +16,7 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_db() -> Iterator[Session]:
+    """Yield a database session for request handling, committing or rolling back on exit."""
     session: Session = SessionLocal()
     try:
         yield session
@@ -29,6 +30,7 @@ def get_db() -> Iterator[Session]:
 
 @contextmanager
 def get_session() -> Iterator[Session]:
+    """Context manager that yields a database session for non-request usage."""
     session = SessionLocal()
     try:
         yield session
@@ -41,6 +43,7 @@ def get_session() -> Iterator[Session]:
 
 
 def apply_seed_if_needed() -> None:
+    """Create the database file if needed and apply seed SQL once on first run."""
     db_path = Path(DEFAULT_DB_PATH)
     db_path.parent.mkdir(parents=True, exist_ok=True)
     newly_created = not db_path.exists()

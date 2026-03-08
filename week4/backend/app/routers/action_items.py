@@ -11,12 +11,14 @@ router = APIRouter(prefix="/action-items", tags=["action_items"])
 
 @router.get("/", response_model=list[ActionItemRead])
 def list_items(db: Session = Depends(get_db)) -> list[ActionItemRead]:
+    """Return all action items stored in the database."""
     rows = db.execute(select(ActionItem)).scalars().all()
     return [ActionItemRead.model_validate(row) for row in rows]
 
 
 @router.post("/", response_model=ActionItemRead, status_code=201)
 def create_item(payload: ActionItemCreate, db: Session = Depends(get_db)) -> ActionItemRead:
+    """Create a new action item with the given description."""
     item = ActionItem(description=payload.description, completed=False)
     db.add(item)
     db.flush()
@@ -26,6 +28,7 @@ def create_item(payload: ActionItemCreate, db: Session = Depends(get_db)) -> Act
 
 @router.put("/{item_id}/complete", response_model=ActionItemRead)
 def complete_item(item_id: int, db: Session = Depends(get_db)) -> ActionItemRead:
+    """Mark an action item as completed or raise 404 if it does not exist."""
     item = db.get(ActionItem, item_id)
     if not item:
         raise HTTPException(status_code=404, detail="Action item not found")

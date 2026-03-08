@@ -5,6 +5,8 @@ Base = declarative_base()
 
 
 class Note(Base):
+    """Database model for persisted notes."""
+
     __tablename__ = "notes"
 
     id = Column(Integer, primary_key=True, index=True)
@@ -13,6 +15,8 @@ class Note(Base):
 
 
 class ActionItem(Base):
+    """Database model for persisted action items."""
+
     __tablename__ = "action_items"
 
     id = Column(Integer, primary_key=True, index=True)

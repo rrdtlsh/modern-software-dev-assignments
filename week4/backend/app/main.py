@@ -20,12 +20,14 @@ app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 @app.on_event("startup")
 def startup_event() -> None:
+    """Initialize database schema and apply seed data on application startup."""
     Base.metadata.create_all(bind=engine)
     apply_seed_if_needed()
 
 
 @app.get("/")
 async def root() -> FileResponse:
+    """Serve the main frontend HTML file."""
     return FileResponse("frontend/index.html")
 
 

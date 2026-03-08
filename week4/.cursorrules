@@ -1,0 +1,7 @@
+# Project Context
+This is a FastAPI backend with a static frontend and a SQLite database.
+
+# Development Guardrails & Workflow
+1. Test-Driven Development: When asked to add or modify an endpoint, ALWAYS write a pytest in `/backend/tests/` first.
+2. Quality Check: After writing code, always remind the user to run `make format`, `make lint`, and `make test`.
+3. Documentation: Ensure every new Python function or class has a proper docstring.
