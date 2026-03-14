@@ -38,5 +38,3 @@ def client() -> Generator[TestClient, None, None]:
 
     engine.dispose()
     os.unlink(db_path)
-
-
