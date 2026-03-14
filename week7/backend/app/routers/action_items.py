@@ -10,6 +10,21 @@ from ..schemas import ActionItemCreate, ActionItemPatch, ActionItemRead
 
 router = APIRouter(prefix="/action-items", tags=["action_items"])
 
+VALID_STATUSES = {"pending", "completed"}
+
+
+@router.get("/status/{status}", response_model=list[ActionItemRead])
+def list_items_by_status(
+    status: str,
+    db: Session = Depends(get_db),
+) -> list[ActionItemRead]:
+    if status not in VALID_STATUSES:
+        raise HTTPException(status_code=400, detail="Invalid status")
+    completed = status == "completed"
+    stmt = select(ActionItem).where(ActionItem.completed.is_(completed))
+    rows = db.execute(stmt).scalars().all()
+    return [ActionItemRead.model_validate(row) for row in rows]
+
 
 @router.get("/", response_model=list[ActionItemRead])
 def list_items(
