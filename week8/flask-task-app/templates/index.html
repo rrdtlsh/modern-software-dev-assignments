@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Task Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+
+    <h1>Student Task Manager</h1>
+
+    <a href="/add" class="btn">Add Task</a>
+
+    <table>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for task in tasks %}
+        <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.deadline }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                <a href="/edit/{{ task.id }}">Edit</a>
+                <a href="/delete/{{ task.id }}" onclick="return confirm('Delete task?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+
+</html>
