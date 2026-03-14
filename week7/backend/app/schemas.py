@@ -26,12 +26,14 @@ class NotePatch(BaseModel):
 
 class ActionItemCreate(BaseModel):
     description: str
+    note_id: int | None = None
 
 
 class ActionItemRead(BaseModel):
     id: int
     description: str
     completed: bool
+    note_id: int | None = None
     created_at: datetime
     updated_at: datetime
 
@@ -42,5 +44,6 @@ class ActionItemRead(BaseModel):
 class ActionItemPatch(BaseModel):
     description: str | None = None
     completed: bool | None = None
+    note_id: int | None = None
 
 
