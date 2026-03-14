@@ -23,3 +23,21 @@ def test_create_list_and_patch_notes(client):
     assert patched["title"] == "Updated"
 
 
+def test_notes_pagination(client):
+    for i in range(5):
+        client.post("/notes/", json={"title": f"Note {i}", "content": f"Content {i}"})
+    r = client.get("/notes/", params={"skip": 1, "limit": 2})
+    assert r.status_code == 200
+    items = r.json()
+    assert len(items) == 2
+
+
+def test_notes_sorting(client):
+    for title in ["Zebra", "Apple", "Mango"]:
+        client.post("/notes/", json={"title": title, "content": "x"})
+    r = client.get("/notes/", params={"sort": "title"})
+    assert r.status_code == 200
+    items = r.json()
+    titles = [n["title"] for n in items]
+    assert titles == sorted(titles)
+

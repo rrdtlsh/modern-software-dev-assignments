@@ -22,3 +22,21 @@ def test_create_complete_list_and_patch_action_item(client):
     assert patched["description"] == "Updated"
 
 
+def test_action_items_pagination(client):
+    for i in range(5):
+        client.post("/action-items/", json={"description": f"Item {i}"})
+    r = client.get("/action-items/", params={"skip": 1, "limit": 2})
+    assert r.status_code == 200
+    items = r.json()
+    assert len(items) == 2
+
+
+def test_action_items_sorting(client):
+    for desc in ["Zebra", "Apple", "Mango"]:
+        client.post("/action-items/", json={"description": desc})
+    r = client.get("/action-items/", params={"sort": "description"})
+    assert r.status_code == 200
+    items = r.json()
+    descriptions = [a["description"] for a in items]
+    assert descriptions == sorted(descriptions)
+
