@@ -34,6 +34,20 @@ def list_notes(
     return [NoteRead.model_validate(row) for row in rows]
 
 
+@router.get("/search", response_model=list[NoteRead])
+def search_notes(
+    q: str = Query(..., description="Search query for title or content"),
+    db: Session = Depends(get_db),
+) -> list[NoteRead]:
+    if not q or not q.strip():
+        raise HTTPException(status_code=400, detail="Query cannot be empty")
+    stmt = select(Note).where(
+        (Note.title.contains(q.strip())) | (Note.content.contains(q.strip()))
+    )
+    rows = db.execute(stmt).scalars().all()
+    return [NoteRead.model_validate(row) for row in rows]
+
+
 @router.post("/", response_model=NoteRead, status_code=201)
 def create_note(payload: NoteCreate, db: Session = Depends(get_db)) -> NoteRead:
     note = Note(title=payload.title, content=payload.content)
