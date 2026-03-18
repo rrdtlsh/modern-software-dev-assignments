@@ -2,40 +2,72 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student Task Manager</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+    <div class="max-w-5xl mx-auto py-10 px-4">
+        <header class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-semibold text-slate-900">Student Task Manager</h1>
+            <a href="/add"
+               class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                Add Task
+            </a>
+        </header>
 
-    <h1>Student Task Manager</h1>
-
-    <a href="/add" class="btn">Add Task</a>
-
-    <table>
-        <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Deadline</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-
-        {% for task in tasks %}
-        <tr>
-            <td>{{ task.title }}</td>
-            <td>{{ task.description }}</td>
-            <td>{{ task.deadline }}</td>
-            <td>{{ task.status }}</td>
-            <td>
-                <a href="/edit/{{ task.id }}">Edit</a>
-                <a href="/delete/{{ task.id }}" onclick="return confirm('Delete task?')">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-
-    </table>
-
+        <div class="overflow-hidden rounded-lg shadow-sm border border-slate-200 bg-white">
+            <table class="min-w-full divide-y divide-slate-200">
+                <thead class="bg-slate-50">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Title</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Description</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Deadline</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Status</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-slate-200">
+                    {% for task in tasks %}
+                    <tr class="hover:bg-slate-50">
+                        <td class="px-4 py-3 text-sm text-slate-800">{{ task.title }}</td>
+                        <td class="px-4 py-3 text-sm text-slate-700">{{ task.description }}</td>
+                        <td class="px-4 py-3 text-sm text-slate-700">{{ task.deadline }}</td>
+                        <td class="px-4 py-3 text-sm">
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium
+                                {% if task.status == 'completed' %}
+                                    bg-green-100 text-green-800
+                                {% else %}
+                                    bg-amber-100 text-amber-800
+                                {% endif %}">
+                                {{ task.status | capitalize }}
+                            </span>
+                        </td>
+                        <td class="px-4 py-3 text-sm space-x-2">
+                            <a href="/edit/{{ task.id }}"
+                               class="inline-flex items-center px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 text-xs font-medium hover:bg-slate-50">
+                                Edit
+                            </a>
+                            <a href="/delete/{{ task.id }}"
+                               onclick="return confirm('Delete task?')"
+                               class="inline-flex items-center px-3 py-1.5 rounded-md bg-red-600 text-white text-xs font-medium hover:bg-red-700">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-4 py-6 text-center text-sm text-slate-500">
+                            No tasks yet. Click <span class="font-medium text-slate-700">Add Task</span> to create one.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 
 </html>

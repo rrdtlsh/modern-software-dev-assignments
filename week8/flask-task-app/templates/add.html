@@ -2,31 +2,55 @@
 <html>
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Task</title>
-    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
+<body class="min-h-screen bg-slate-50 text-slate-800">
+    <div class="max-w-xl mx-auto py-10 px-4">
+        <header class="flex items-center justify-between mb-8">
+            <h1 class="text-3xl font-semibold text-slate-900">Add Task</h1>
+            <a href="/"
+               class="inline-flex items-center px-3 py-1.5 rounded-md border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50">
+                Back
+            </a>
+        </header>
 
-    <h1>Add Task</h1>
+        <div class="rounded-lg border border-slate-200 bg-white shadow-sm p-6">
+            <form method="POST" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Title</label>
+                    <input type="text" name="title" required
+                           class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2">
+                </div>
 
-    <form method="POST">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Description</label>
+                    <textarea name="description" rows="3"
+                              class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2"></textarea>
+                </div>
 
-        <label>Title</label>
-        <input type="text" name="title" required>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">Deadline</label>
+                    <input type="date" name="deadline"
+                           class="block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm px-3 py-2">
+                </div>
 
-        <label>Description</label>
-        <textarea name="description"></textarea>
-
-        <label>Deadline</label>
-        <input type="date" name="deadline">
-
-        <button type="submit">Save Task</button>
-
-    </form>
-
-    <a href="/">Back</a>
-
+                <div class="pt-2 flex items-center justify-end space-x-3">
+                    <a href="/"
+                       class="inline-flex items-center px-4 py-2 rounded-md border border-slate-300 text-slate-700 text-sm font-medium hover:bg-slate-50">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                            class="inline-flex items-center px-4 py-2 rounded-md bg-blue-600 text-white text-sm font-medium shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Save Task
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 </body>
 
 </html>
